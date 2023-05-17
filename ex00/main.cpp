@@ -10,15 +10,13 @@
 #include <iomanip>
 
 bool operator<(const std::tm& lhs, const std::tm& rhs) {
-    return lhs.tm_sec < rhs.tm_sec &&
-           lhs.tm_min < rhs.tm_min &&
-           lhs.tm_hour < rhs.tm_hour &&
-           lhs.tm_mday < rhs.tm_mday &&
-           lhs.tm_mon < rhs.tm_mon &&
-           lhs.tm_year < rhs.tm_year &&
-           lhs.tm_wday < rhs.tm_wday &&
-           lhs.tm_yday < rhs.tm_yday &&
-           lhs.tm_isdst < rhs.tm_isdst;
+    if (lhs.tm_year < rhs.tm_year)
+        return true;
+    if (lhs.tm_mon < rhs.tm_mon)
+        return truetm_;
+    if (lhs.tm_mday < rhs.tm_mday)
+        return true;
+    return false;
 }
 
 void    isValidDate(const std::tm& date)
@@ -69,7 +67,8 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
             isValidDate(tm);
             std::cout << tm.tm_year << "-"\
             << tm.tm_mon << "-" << tm.tm_mday << std::endl;
-            ss >> c;
+            if (!(ss >> c))
+                std::cout << "hhhhhhh" << std::endl; 
             if (c != ',')
             {
                 std::cout << "Error unvalid format ==> " << line  << std::endl;
@@ -91,7 +90,16 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
     return k;
 }
 
-void op_f(std::ifstream &h) 
+// float   search_db(std::vector<pair<std::tm, float> > &db, pair<std::tm, float> &p)
+// {
+//     std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
+//     while (b != db.end())
+//     {
+//         b++;
+//     }
+// }
+
+void op_f(std::ifstream &h, std::vector<pair<std::tm, float> > &db) 
 {
     char    c;
     float    j;
