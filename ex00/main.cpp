@@ -174,8 +174,10 @@ int main(int ac, char **av)
         std::cout << "Error: could not open file" << std::endl;
         exit(0);
     }
+    getline(h, line);
+    std::istringstream ss(line);
     // db = parse_db(h);
-    op_f(h);
+    // op_f(h);
     // std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
     // for(b = db.begin(); b != db.end(); b++)
     //     std::cout << b->second << std::endl;
