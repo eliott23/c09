@@ -178,7 +178,8 @@ int main(int ac, char **av)
     getline(h, line);
     std::istringstream ss(line);
     char    c;
-    ss.get(c);
+    while (ss.get(c))
+        std::cout << c << std::endl;
     // db = parse_db(h);
     // op_f(h);
     // std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
