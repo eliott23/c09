@@ -13,7 +13,7 @@ bool operator<(const std::tm& lhs, const std::tm& rhs) {
     if (lhs.tm_year < rhs.tm_year)
         return true;
     if (lhs.tm_mon < rhs.tm_mon)
-        return truetm_;
+        return true;
     if (lhs.tm_mday < rhs.tm_mday)
         return true;
     return false;
@@ -44,6 +44,15 @@ void    isValidDate(const std::tm& date)
     }
 }
 
+void extract_check(std::istringstream &ss, char &c, std::string &line)
+{
+        if (!(ss >> c))
+        {
+            std::cout << "Error unvalid format ==> " << line  << std::endl;
+            exit(0); 
+        }
+}
+
 std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h) 
 {
     char    c;
@@ -57,18 +66,19 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
     {
         std::cout << "up" << std::endl;
         std::istringstream ss(line);
-        std::cout << "this is the line |" << line  << "|" << std::endl;
         ss >> std::get_time(&tm, "%Y-%m-%d");
         if (ss.fail())
+        {
             std::cout << "Error unvalid date" << std::endl;
+            exit(0);
+        }
         else
         {
             tm.tm_year += 1900;
             isValidDate(tm);
             std::cout << tm.tm_year << "-"\
             << tm.tm_mon << "-" << tm.tm_mday << std::endl;
-            if (!(ss >> c))
-                std::cout << "hhhhhhh" << std::endl; 
+            extract_check(ss, c, line);
             if (c != ',')
             {
                 std::cout << "Error unvalid format ==> " << line  << std::endl;
@@ -99,10 +109,12 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
 //     }
 // }
 
-void op_f(std::ifstream &h, std::vector<pair<std::tm, float> > &db) 
+// void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db) 
+void op_f(std::ifstream &h) 
 {
     char    c;
     float    j;
+    std::string deb;
     std::string line;
     std::pair<std::tm, float> p;
     std::vector<std::pair<std::tm , float> > k;
@@ -110,24 +122,27 @@ void op_f(std::ifstream &h, std::vector<pair<std::tm, float> > &db)
 
     while (getline(h, line))
     {
-        std::cout << "up" << std::endl;
         std::istringstream ss(line);
-        std::cout << "this is the line |" << line  << "|" << std::endl;
         ss >> std::get_time(&tm, "%Y-%m-%d");
         if (ss.fail())
+        {
             std::cout << "Error unvalid date" << std::endl;
+            exit(0);
+        }
         else
         {
             tm.tm_year += 1900;
             isValidDate(tm);
-            std::cout << tm.tm_year << "-"\
-            << tm.tm_mon << "-" << tm.tm_mday << std::endl;
-            ss >> c;
-            if (c != ',')
+            // std::cout << tm.tm_year << "-"\
+            // << tm.tm_mon << "-" << tm.tm_mday << std::endl;
+            extract_check(ss, c, line);
+            // std::cout << "|" << c << "|" << std::endl;
+            if (c != '|')
             {
                 std::cout << "Error unvalid format ==> " << line  << std::endl;
                 exit(0);
             }
+            // extract_check(ss, c, line);
             if (ss >> j)
             { 
                 p.first = tm;
@@ -141,6 +156,7 @@ void op_f(std::ifstream &h, std::vector<pair<std::tm, float> > &db)
             }
         }
     }
+    // (void)db;
 }
 
 int main(int ac, char **av)
@@ -158,8 +174,9 @@ int main(int ac, char **av)
         std::cout << "Error: could not open file" << std::endl;
         exit(0);
     }
-    db = parse_db(h);
-    std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
-    for(b = db.begin(); b != db.end(); b++)
-        std::cout << b->second << std::endl;
+    // db = parse_db(h);
+    op_f(h);
+    // std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
+    // for(b = db.begin(); b != db.end(); b++)
+    //     std::cout << b->second << std::endl;
 }
