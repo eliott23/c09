@@ -15,7 +15,6 @@ void    isValidDate(const std::tm& date) {
     static const int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     int daysInCurrentMonth = daysInMonth[date.tm_mon];
 
-
     if (date.tm_mday > daysInCurrentMonth)
     {
     // Account for leap years (February has 29 days)
@@ -35,13 +34,54 @@ void    isValidDate(const std::tm& date) {
     }
 }
 
-int main(int ac, char **av)
+std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h) 
 {
     char    c;
     float    j;
-    std::exception e;
     std::string line;
-    std::vector<std::pair<int, int> > k;
+    std::pair<std::tm, float> p;
+    std::vector<std::pair<std::tm , float> > k;
+    std::tm tm  = {};
+
+    while (getline(h, line))
+    {
+        std::cout << "up" << std::endl;
+        std::istringstream ss(line);
+        std::cout << "this is the line |" << line  << "|" << std::endl;
+        ss >> std::get_time(&tm, "%Y-%m-%d");
+        if (ss.fail())
+            std::cout << "Error unvalid date" << std::endl;
+        else
+        {
+            tm.tm_year += 1900;
+            isValidDate(tm);
+            std::cout << tm.tm_year << "-"\
+            << tm.tm_mon << "-" << tm.tm_mday << std::endl;
+            ss >> c;
+            if (c != ',')
+            {
+                std::cout << "Error unvalid format ==> " << line  << std::endl;
+                exit(0);
+            }
+            if (ss >> j)
+            { 
+                p.first = tm;
+                p.second = j;
+                k.push_back(p);
+            }
+            else
+            {
+                std::cout << "Error unvalid bitcoin format ==> " << line  << std::endl;
+                exit(0);
+            }
+        }
+    }
+    return k;
+}
+
+int main(int ac, char **av)
+{
+    std::vector<std::pair<std::tm , float> > db;
     if (ac != 2)
     {
         std::cout << "Error: could not open file" << std::endl;
@@ -53,25 +93,9 @@ int main(int ac, char **av)
         std::cout << "Error: could not open file" << std::endl;
         exit(0);
     }
-    getline(h, line);
-    line.clear();
-    getline(h, line);
-    std::istringstream ss(line);
-    std::tm tm  = {};
-    ss >> std::get_time(&tm, "%Y-%m-%d");
-    if (ss.fail())
-        std::cout << "Error unvalid date" << std::endl;
-    else
-    {
-        tm.tm_year += 1900;
-        isValidDate(tm);
-        std::cout << tm.tm_year << "-"\
-        << tm.tm_mon << "-" << tm.tm_mday << std::endl;
-        if (ss >> c) 
-            std::cout << "hh" << std::endl;
-        if (c != ',')
-            std::cout << "Error unvalid format ==> " << line  << std::endl;
-        if (ss >> j)
-            std::cout << j << std::endl;
-    }
+    db = parse_db(h);
+    std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
+    // std::vector<std::pair<std::tm, float> >::iterator e = db.end();
+    for(b = db.begin(); b != db.end(); b++)
+        std::cout << b->second << std::endl;
 }
