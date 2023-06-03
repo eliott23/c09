@@ -9,6 +9,15 @@
 #include <sstream>
 #include <iomanip>
 
+// float   search_db(std::vector<pair<std::tm, float> > &db, pair<std::tm, float> &p)
+// {
+//     std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
+//     while (b != db.end())
+//     {
+//         b++;
+//     }
+// }
+
 bool operator<(const std::tm& lhs, const std::tm& rhs) {
     if (lhs.tm_year < rhs.tm_year)
         return true;
@@ -46,9 +55,9 @@ void    isValidDate(const std::tm& date)
 
 void extract_check(std::istringstream &ss, char &c, std::string &line)
 {
-        if (!(ss >> c))
+        if (!(ss >> std::noskipws >> c)) //check later
         {
-            std::cout << "Error unvalid format ==> " << line  << std::endl;
+            std::cout << "Error unvalid formathere ==> " << line  << std::endl;
             exit(0); 
         }
 }
@@ -100,21 +109,14 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
     return k;
 }
 
-// float   search_db(std::vector<pair<std::tm, float> > &db, pair<std::tm, float> &p)
-// {
-//     std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
-//     while (b != db.end())
-//     {
-//         b++;
-//     }
-// }
 
 // void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db) 
 void op_f(std::ifstream &h) 
 {
     char    c;
     float    j;
-    std::string deb;
+    std::string targ = " | ";
+    std::string form;
     std::string line;
     std::pair<std::tm, float> p;
     std::vector<std::pair<std::tm , float> > k;
@@ -133,16 +135,20 @@ void op_f(std::ifstream &h)
         {
             tm.tm_year += 1900;
             isValidDate(tm);
-            // std::cout << tm.tm_year << "-"\
-            // << tm.tm_mon << "-" << tm.tm_mday << std::endl;
-            extract_check(ss, c, line);
-            // std::cout << "|" << c << "|" << std::endl;
-            if (c != '|')
+            std::cout << tm.tm_year << "-"\
+            << tm.tm_mon << "-" << tm.tm_mday << std::endl;
+            for (int i = 0; i < 3; i++)
             {
-                std::cout << "Error unvalid format ==> " << line  << std::endl;
-                exit(0);
+                std::cout << "up" << std::endl;
+                extract_check(ss, c, line); 
+                std::cout << "c =" << c << std::endl;
+                form.push_back(c);
             }
-            // extract_check(ss, c, line);
+            if (form != targ)
+            {
+                std::cout << "Error unvalid format ==>" << line  << std::endl;
+                std::cout << "here" << std::endl;
+            }
             if (ss >> j)
             { 
                 p.first = tm;
@@ -154,9 +160,11 @@ void op_f(std::ifstream &h)
                 std::cout << "Error unvalid bitcoin format ==> " << line  << std::endl;
                 exit(0);
             }
+            ss >> c;
+            if (!std::ios_base::eofbit && !std::ios_base::goodbit)
+                std::cout << "Error unvalid format ==>" << line  << std::endl;
         }
     }
-    // (void)db;
 }
 
 int main(int ac, char **av)
@@ -164,7 +172,7 @@ int main(int ac, char **av)
     std::vector<std::pair<std::tm , float> > db;
     if (ac != 2)
     {
-        std::cout << "Error: could not open file" << std::endl;
+        std::cout << "Error: wrong number of arguments" << std::endl;
         exit(0);
     }
     (void)av;
@@ -174,14 +182,16 @@ int main(int ac, char **av)
         std::cout << "Error: could not open file" << std::endl;
         exit(0);
     }
+    std::ifstream f(av[1]);
+    if (!f.is_open())
+    {
+        std::cout << "Error: could not open file" << std::endl;
+        exit(0);
+    }
     std::string line;
     getline(h, line);
-    std::istringstream ss(line);
-    char    c;
-    while (ss.get(c))
-        std::cout << c << std::endl;
     // db = parse_db(h);
-    // op_f(h);
+    op_f(f);
     // std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
     // for(b = db.begin(); b != db.end(); b++)
     //     std::cout << b->second << std::endl;
