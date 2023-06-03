@@ -106,7 +106,6 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
     return k;
 }
 
-
 // void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db) 
 std::vector<std::pair<std::tm , float> > op_f(std::ifstream &h) 
 {
@@ -184,7 +183,6 @@ int main(int ac, char **av)
         std::cout << "Error: wrong number of arguments" << std::endl;
         exit(0);
     }
-    (void)av;
     std::ifstream h("data.csv");
     if (!h.is_open())
     {
@@ -202,7 +200,4 @@ int main(int ac, char **av)
     db = parse_db(h);
     k = op_f(f);
     res(db, k);
-    // std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
-    // for(b = db.begin(); b != db.end(); b++)
-    //     std::cout << b->second << std::endl;
 }
