@@ -2,6 +2,7 @@ FLAGS=-Wall -Wextra -Werror -std=c++98 -fsanitize=address
 NAME=ex00
 
 SRC=main.cpp\
+	utils.cpp\
 
 OBJ=$(SRC:.cpp=.o)
 
