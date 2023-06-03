@@ -160,8 +160,7 @@ void op_f(std::ifstream &h)
                 std::cout << "Error unvalid bitcoin format ==> " << line  << std::endl;
                 exit(0);
             }
-            ss >> c;
-            if (!std::ios_base::eofbit && !std::ios_base::goodbit)
+            if (ss.rdbuf()->in_avail())
                 std::cout << "Error unvalid format ==>" << line  << std::endl;
         }
     }
