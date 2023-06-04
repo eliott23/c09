@@ -116,8 +116,6 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
             exit(0);
         }
     }
-    if (line.empty())
-        std::cout << "Error empty line at end of file" << line  << std::endl;
     return k;
 }
 
