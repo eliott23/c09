@@ -50,12 +50,14 @@ bool operator>=(const std::tm& lhs, const std::tm& rhs) {
     return (lhs > rhs || lhs == rhs);
 }
 
-void    res(std::vector<std::pair<std::tm , float> > &db, std::vector<std::pair<std::tm , float> > &k)
+void    res(std::vector<std::pair<std::tm , float> > &db, std::pair<std::tm , float> &k)
 {
-    std::vector<std::pair<std::tm, float> >::iterator b = k.begin();
-    for(; b != k.end(); b++)
-    {
-        std::cout << search_db(db, *b) << std::endl;
-    }
+    // std::vector<std::pair<std::tm, float> >::iterator b = k.begin();
+    // for(; b != k.end(); b++)
+    // {
+        std::cout << search_db(db, k) << std::endl;
+    //         std::cout << tm.tm_year << "-"\
+    //         << tm.tm_mon << "-" << tm.tm_mday << std::endl;
+    // }
     // (void)db;
 }

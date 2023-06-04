@@ -106,8 +106,8 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
     return k;
 }
 
-// void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db) 
-std::vector<std::pair<std::tm , float> > op_f(std::ifstream &h) 
+// void op_f(std::ifstream &h, ) 
+std::vector<std::pair<std::tm , float> > op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db) 
 {
     char    c;
     float    j;
@@ -131,8 +131,6 @@ std::vector<std::pair<std::tm , float> > op_f(std::ifstream &h)
         {
             tm.tm_year += 1900;
             isValidDate(tm);
-            std::cout << tm.tm_year << "-"\
-            << tm.tm_mon << "-" << tm.tm_mday << std::endl;
             for (int i = 0; i < 3; i++)
             {
                 extract_check(ss, c, line); 
@@ -154,7 +152,7 @@ std::vector<std::pair<std::tm , float> > op_f(std::ifstream &h)
                 }
                 p.first = tm;
                 p.second = j;
-                k.push_back(p);
+                // k.push_back(p); //directly pass the pair to be processed according to DB date!
             }
             else
             {
@@ -169,6 +167,9 @@ std::vector<std::pair<std::tm , float> > op_f(std::ifstream &h)
                 std::cout << "Error unvalid format ==>" << line  << std::endl;
                 exit(0);
             }
+            std::cout << tm.tm_year << "-"\
+            << tm.tm_mon + 1 << "-" << tm.tm_mday << " => " << p.second << " = ";
+            res(db, p);
         }
     }
     return (k);
@@ -198,6 +199,6 @@ int main(int ac, char **av)
     std::string line;
     getline(h, line);
     db = parse_db(h);
-    k = op_f(f);
-    res(db, k);
+    k = op_f(f, db);
+    // res(db, k);
 }
