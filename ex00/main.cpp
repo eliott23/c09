@@ -48,7 +48,7 @@ void extract_check(std::istringstream &ss, char &c, std::string &line)
     std::exception e;
         if (!(ss >> std::noskipws >> c)) //check later
         {
-            std::cout << "Error unvalid formathere ==> " << line  << std::endl;
+            std::cout << "Error unvalid format ==> " << line  << std::endl;
             throw e; 
         }
 }
