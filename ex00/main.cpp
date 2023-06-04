@@ -19,6 +19,7 @@ float   search_db(std::vector<std::pair<std::tm, float> > &db, std::pair<std::tm
 
 void    isValidDate(const std::tm& date)
 {
+    std::exception e;
     // Check if the month has a valid number of days
     static const int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     int daysInCurrentMonth = daysInMonth[date.tm_mon];
@@ -31,23 +32,24 @@ void    isValidDate(const std::tm& date)
             if (date.tm_mday > 29)
             {
                 std::cout << "Error: unvalid date" << std::endl;
-                exit(0);
+                throw e;
             }
         }
         else
         {
             std::cout << "Error: unvalid date" << std::endl;
-            exit(0);
+            throw e;
         }
     }
 }
 
 void extract_check(std::istringstream &ss, char &c, std::string &line)
 {
+    std::exception e;
         if (!(ss >> std::noskipws >> c)) //check later
         {
             std::cout << "Error unvalid formathere ==> " << line  << std::endl;
-            exit(0); 
+            throw e; 
         }
 }
 
@@ -61,53 +63,57 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
     std::pair<std::tm, float> p;
     std::vector<std::pair<std::tm , float> > k;
     std::tm tm  = {};
+    std::exception e;
 
     while (getline(h, line))
     {
-        std::istringstream ss(line);
-        ss >> std::get_time(&tm, "%Y-%m-%d");
-        if (ss.fail())
-        {
-            std::cout << "Error unvalid date" << std::endl;
-            exit(0);
-        }
-        else
-        {
-            tm.tm_year += 1900;
-            isValidDate(tm);
-            // std::cout << tm.tm_year << "-"\
-            // << tm.tm_mon << "-" << tm.tm_mday << std::endl;
-            extract_check(ss, c, line); 
-            form.push_back(c);
-            if (form != targ)
+        try{
+            std::istringstream ss(line);
+            ss >> std::get_time(&tm, "%Y-%m-%d");
+            if (ss.fail())
             {
-                std::cout << "Error unvalid format ==>" << line  << std::endl;
-                exit(0);
-            }
-            form.clear();
-            if (ss >> j)
-            { 
-                p.first = tm;
-                p.second = j;
-                k.push_back(p);
+                std::cout << "Error unvalid date" << std::endl;
+                throw e;
             }
             else
             {
-                std::cout << "Error unvalid bitcoin format ==> " << line  << std::endl;
-                exit(0);
+                tm.tm_year += 1900;
+                isValidDate(tm);
+                extract_check(ss, c, line); 
+                form.push_back(c);
+                if (form != targ)
+                {
+                    std::cout << "Error unvalid format ==>" << line  << std::endl;
+                    throw e;
+                }
+                form.clear();
+                if (ss >> j)
+                { 
+                    p.first = tm;
+                    p.second = j;
+                    k.push_back(p);
+                }
+                else
+                {
+                    std::cout << "Error unvalid bitcoin format ==> " << line  << std::endl;
+                    throw e;
+                }
+                if (ss.rdbuf()->in_avail())
+                {
+                    std::cout << "Error unvalid format ==>" << line  << std::endl;
+                    throw e;
+                }
             }
-            if (ss.rdbuf()->in_avail())
-            {
-                std::cout << "Error unvalid format ==>" << line  << std::endl;
-                exit(0);
-            }
+        }
+        catch (std::exception &e)
+        {
+            exit(0);
         }
     }
     return k;
 }
 
-// void op_f(std::ifstream &h, ) 
-std::vector<std::pair<std::tm , float> > op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db) 
+void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db) 
 {
     char    c;
     float    j;
@@ -117,68 +123,72 @@ std::vector<std::pair<std::tm , float> > op_f(std::ifstream &h, std::vector<std:
     std::pair<std::tm, float> p;
     std::vector<std::pair<std::tm , float> > k;
     std::tm tm  = {};
+    std::exception e;
 
     while (getline(h, line))
     {
-        std::istringstream ss(line);
-        ss >> std::get_time(&tm, "%Y-%m-%d");
-        if (ss.fail())
+        try
         {
-            std::cout << "Error unvalid date" << std::endl;
-            exit(0);
-        }
-        else
-        {
-            tm.tm_year += 1900;
-            isValidDate(tm);
-            for (int i = 0; i < 3; i++)
+            std::istringstream ss(line);
+            ss >> std::get_time(&tm, "%Y-%m-%d");
+            if (ss.fail())
             {
-                extract_check(ss, c, line); 
-                form.push_back(c);
-            }
-            if (form != targ)
-            {
-                std::cout << "Error unvalid format ==>" << line  << std::endl;
-                std::cout << "here" << std::endl;
-                exit(0);
-            }
-            form.clear();
-            if (ss >> j)
-            {
-                if (j > 1000 || j < 0)
-                {
-                    std::cout << "Error unvalid bitcoin value ==> " << line  << std::endl;
-                    exit(0);
-                }
-                p.first = tm;
-                p.second = j;
-                // k.push_back(p); //directly pass the pair to be processed according to DB date!
+                std::cout << "Error unvalid date" << std::endl;
+                throw e;
             }
             else
             {
-                if (!(ss.rdbuf()->in_avail()))
-                    std::cout << "Error unvalid bitcoin value ==> " << line  << std::endl;
+                tm.tm_year += 1900;
+                isValidDate(tm);
+                for (int i = 0; i < 3; i++)
+                {
+                    extract_check(ss, c, line); 
+                    form.push_back(c);
+                }
+                if (form != targ)
+                {
+                    std::cout << "Error unvalid format ==>" << line  << std::endl;
+                    throw e;
+                }
+                form.clear();
+                if (ss >> j)
+                {
+                    if (j > 1000 || j < 0)
+                    {
+                        std::cout << "Error unvalid bitcoin value ==> " << line  << std::endl;
+                        throw e;
+                    }
+                    p.first = tm;
+                    p.second = j;
+                }
                 else
-                    std::cout << "Error unvalid format ==> " << line  << std::endl;
-                exit(0);
+                {
+                    if (!(ss.rdbuf()->in_avail()))
+                        std::cout << "Error unvalid bitcoin value ==> " << line  << std::endl;
+                    else
+                        std::cout << "Error unvalid format ==> " << line  << std::endl;
+                    throw e;
+                }
+                if (ss.rdbuf()->in_avail())
+                {
+                    std::cout << "Error unvalid format ==>" << line  << std::endl;
+                    throw e;
+                }
+                std::cout << tm.tm_year << "-"\
+                << tm.tm_mon + 1 << "-" << tm.tm_mday << " => " << p.second << " = ";
+                std::cout << search_db(db, p) << std::endl;
             }
-            if (ss.rdbuf()->in_avail())
-            {
-                std::cout << "Error unvalid format ==>" << line  << std::endl;
-                exit(0);
-            }
-            std::cout << tm.tm_year << "-"\
-            << tm.tm_mon + 1 << "-" << tm.tm_mday << " => " << p.second << " = ";
-            res(db, p);
+        }
+        catch (...)
+        {
+            form.clear();
         }
     }
-    return (k);
 }
 
 int main(int ac, char **av)
 {
     std::vector<std::pair<std::tm , float> > db;
-    std::vector<std::pair<std::tm , float> > k;
     if (ac != 2)
     {
         std::cout << "Error: wrong number of arguments" << std::endl;
@@ -199,6 +209,5 @@ int main(int ac, char **av)
     std::string line;
     getline(h, line);
     db = parse_db(h);
-    k = op_f(f, db);
-    // res(db, k);
+    op_f(f, db);
 }
