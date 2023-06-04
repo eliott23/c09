@@ -2,7 +2,6 @@ FLAGS=-Wall -Wextra -Werror -std=c++98 -fsanitize=address
 NAME=btc
 
 SRC=main.cpp\
-	BitcoinExchange.cpp\
 
 OBJ=$(SRC:.cpp=.o)
 

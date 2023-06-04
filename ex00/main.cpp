@@ -197,7 +197,7 @@ void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db)
         }
     }
     if (line.empty())
-        std::cout << "Error empty line at end of file" << line  << std::endl;
+        std::cout << "Error empty line" << line  << std::endl;
 }
 
 int main(int ac, char **av)
