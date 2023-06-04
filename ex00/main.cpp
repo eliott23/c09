@@ -155,7 +155,10 @@ void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db)
                 {
                     if (j > 1000 || j < 0)
                     {
-                        std::cout << "Error unvalid bitcoin value ==> " << line  << std::endl;
+                        if (j > 1000)
+                            std::cout << "Error bitcoin value too large" << std::endl;
+                        else
+                            std::cout << "Error not a positive number" << std::endl;
                         throw e;
                     }
                     p.first = tm;
