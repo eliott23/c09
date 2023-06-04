@@ -92,14 +92,6 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
                 form.clear();
                 if (ss >> j)
                 { 
-                    if (j > 1000 || j < 0)
-                    {
-                        if (j > 1000)
-                            std::cout << "Error bitcoin value too large" << std::endl;
-                        else
-                            std::cout << "Error not a positive number" << std::endl;
-                        throw e;
-                    }
                     p.first = tm;
                     p.second = j;
                     k.push_back(p);
