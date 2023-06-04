@@ -72,7 +72,10 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
             ss >> std::get_time(&tm, "%Y-%m-%d");
             if (ss.fail())
             {
-                std::cout << "Error unvalid date" << std::endl;
+                if (line.empty())
+                    std::cout << "Error empty line" << line  << std::endl;
+                else
+                    std::cout << "Error unvalid date" << std::endl;
                 throw e;
             }
             else
@@ -89,13 +92,24 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
                 form.clear();
                 if (ss >> j)
                 { 
+                    if (j > 1000 || j < 0)
+                    {
+                        if (j > 1000)
+                            std::cout << "Error bitcoin value too large" << std::endl;
+                        else
+                            std::cout << "Error not a positive number" << std::endl;
+                        throw e;
+                    }
                     p.first = tm;
                     p.second = j;
                     k.push_back(p);
                 }
                 else
                 {
-                    std::cout << "Error unvalid bitcoin format ==> " << line  << std::endl;
+                    if (!(ss.rdbuf()->in_avail()))
+                        std::cout << "Error unvalid bitcoin value ==> " << line  << std::endl;
+                    else
+                        std::cout << "Error unvalid format ==> " << line  << std::endl;
                     throw e;
                 }
                 if (ss.rdbuf()->in_avail())
@@ -110,6 +124,8 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
             exit(0);
         }
     }
+    if (line.empty())
+        std::cout << "Error empty line at end of file" << line  << std::endl;
     return k;
 }
 
@@ -133,7 +149,10 @@ void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db)
             ss >> std::get_time(&tm, "%Y-%m-%d");
             if (ss.fail())
             {
-                std::cout << "Error unvalid date" << std::endl;
+                if (line.empty())
+                    std::cout << "Error empty line" << line  << std::endl;
+                else
+                    std::cout << "Error unvalid date" << std::endl;
                 throw e;
             }
             else
@@ -188,9 +207,7 @@ void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db)
         }
     }
     if (line.empty())
-    {
-        std::cout << "Error unvalid format ==>" << line  << std::endl;
-    }
+        std::cout << "Error empty line at end of file" << line  << std::endl;
 }
 
 int main(int ac, char **av)
