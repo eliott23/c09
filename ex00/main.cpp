@@ -6,10 +6,10 @@ float   search_db(std::vector<std::pair<std::tm, float> > &db, std::pair<std::tm
     std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
     std::vector<std::pair<std::tm, float> >::iterator btwo = b + 1;
 
-    while (b != db.end() && btwo != db.end())
+    while (b != db.end())
     {
         btwo = b + 1;
-        if (b->first < p.first && btwo->first <= p.first)
+        if (btwo != db.end() &&  b->first < p.first && btwo->first <= p.first)
             b++;
         else
             break;
