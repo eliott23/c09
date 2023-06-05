@@ -13,6 +13,7 @@ int main(int ac, char *av[])
     std::istream &k = ss;
     std::string str;
     std::string oper = "+*-/";
+    int f;
     int i;
     char c;
     while (getline(k, str, ' '))
