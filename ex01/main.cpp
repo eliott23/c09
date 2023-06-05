@@ -16,6 +16,8 @@ int main(int ac, char *av[])
         exit(0);
     }
     std::string f(av[1]);
+    if (f.empty())
+        exiterr();
     std::istringstream ss(f);
     std::istream &k = ss;
     std::string str;
@@ -30,21 +32,21 @@ int main(int ac, char *av[])
         // std::cout << str << std::endl;
         std::istringstream sss(str);
         if (sss >> i)
-            {
-                s.push(i);
-                calc++;
-                if (calc > 2)
-                    exiterr();
-            }
-            else if (s.size() >= 2)
-            {
-                sss.clear();
-                c = str.front();
-                Op(c, s, calc);
-            }
-            else
+        {
+            s.push(i);
+            calc++;
+            if (calc > 2)
                 exiterr();
-            str.clear();
+        }
+        else if (s.size() >= 2)
+        {
+            sss.clear();
+            c = str.front();
+            Op(c, s, calc);
+        }
+        else
+            exiterr();
+        str.clear();
     }
     if ((std::ios_base::badbit && !std::ios_base::eofbit) || s.size() > 1)
         exiterr();
