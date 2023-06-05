@@ -1,7 +1,8 @@
-FLAGS=-Wall -Wextra -Werror -std=c++98 -fsanitize=address
-NAME=btc
+FLAGS=#-Wall -Wextra -Werror -std=c++98 -fsanitize=address
+NAME=RPN
 
 SRC=main.cpp\
+	RPN.cpp\
 
 OBJ=$(SRC:.cpp=.o)
 

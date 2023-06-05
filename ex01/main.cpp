@@ -1,12 +1,8 @@
-#include <stack>
-#include <iostream>
-#include <istream>
-#include <sstream>
-
+# include "RPN.hpp"
 int main(int ac, char *av[])
 {
     std::pair<int, char> p;
-    std::stack<std::pair<int, char> > s;
+    std::stack<int> s;
     if (ac != 2)
     {
         std::cout << "Error" << std::endl;
@@ -14,14 +10,33 @@ int main(int ac, char *av[])
     }
     std::string f(av[1]);
     std::istringstream ss(f);
+    std::istream &k = ss;
     std::string str;
-    unsigned int n = 0;
-    while (ss >> n) 
+    std::string oper = "+*-/";
+    int i;
+    char c;
+    while (getline(k, str, ' '))
     {
-            // std::cout << n << std::endl;
+        if(str.size() > 1 || ((oper.find(str.front())) == std::string::npos && !std::isdigit(str.front())))
+        {
+            std::cout << "Error" << std::endl;
+            exit(0);
+        }
+        std::cout << str << std::endl;
+        std::istringstream sss(str);
+        if (sss >> i)
+        {
+            sss.clear();
+            s.push(i);
+            if (s.size() > 2)
+                std::cout << "Error" << std::endl;
+        }
+        else
+        {
+            sss >> c;
+        }
+        str.clear();
     }
-    std::cout << ss.rdbuf() << std::endl;
-    // std::cout << ss.rdbuf() << std::endl;
     if (std::ios_base::badbit && !std::ios_base::eofbit)
-        std::cout << "Error" << std::endl;
+        std::cout << "Error3" << std::endl;
 }
