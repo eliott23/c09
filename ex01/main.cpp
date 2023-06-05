@@ -13,7 +13,7 @@ int main(int ac, char *av[])
     std::istream &k = ss;
     std::string str;
     std::string oper = "+*-/";
-    int f;
+    int calc;
     int i;
     char c;
     while (getline(k, str, ' '))
@@ -27,17 +27,20 @@ int main(int ac, char *av[])
         std::istringstream sss(str);
         if (sss >> i)
         {
-            sss.clear();
             s.push(i);
-            if (s.size() > 2)
+            calc++;
+            if (calc > 2)
                 std::cout << "Error" << std::endl;
         }
         else
         {
-            sss >> c;
+            sss.clear();
+            if (sss >> c)
+                std::cout << "hhhh this is c ==>'" << c << "'"<< std::endl;
+            Op(c, s, calc);
         }
         str.clear();
     }
-    if (std::ios_base::badbit && !std::ios_base::eofbit)
+    if ((std::ios_base::badbit && !std::ios_base::eofbit) || s.size() > 1)
         std::cout << "Error3" << std::endl;
 }

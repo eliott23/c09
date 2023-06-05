@@ -1,6 +1,6 @@
 # include "RPN.hpp"
 
-int Op(char op, std::stack<int> &stk)
+void Op(char op, std::stack<int> &stk, int &calc)
 {
     int t = stk.top();
     stk.pop();
@@ -24,5 +24,6 @@ int Op(char op, std::stack<int> &stk)
             std::cout << "Invalid operator." << std::endl;
     }
     stk.push(result);
+    calc = 0;
 }
 

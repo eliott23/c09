@@ -6,4 +6,4 @@
 #include <sstream>
 #include <string>
 
-int Op(char op, std::stack<int> &stk);
+void Op(char op, std::stack<int> &stk, int &calc);
