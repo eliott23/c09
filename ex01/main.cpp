@@ -32,13 +32,16 @@ int main(int ac, char *av[])
             if (calc > 2)
                 std::cout << "Error" << std::endl;
         }
-        else
+        else if (s.size() >= 2)
         {
             sss.clear();
             if (sss >> c)
-                std::cout << "hhhh this is c ==>'" << c << "'"<< std::endl;
+                std::cout << "this is c ==>'" << c << "'"<< std::endl;
+            std::cout << "hhhh this is c ==>'" << c << "'"<< std::endl;
             Op(c, s, calc);
         }
+        else
+            std::cout << "Error" << std::endl;
         str.clear();
     }
     if ((std::ios_base::badbit && !std::ios_base::eofbit) || s.size() > 1)
