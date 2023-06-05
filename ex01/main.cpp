@@ -1,4 +1,11 @@
 # include "RPN.hpp"
+
+void    exiterr()
+{
+    std::cout << "Error" << std::endl;
+    exit(0);
+}
+
 int main(int ac, char *av[])
 {
     std::pair<int, char> p;
@@ -19,31 +26,27 @@ int main(int ac, char *av[])
     while (getline(k, str, ' '))
     {
         if(str.size() > 1 || ((oper.find(str.front())) == std::string::npos && !std::isdigit(str.front())))
-        {
-            std::cout << "Error" << std::endl;
-            exit(0);
-        }
-        std::cout << str << std::endl;
+            exiterr();
+        // std::cout << str << std::endl;
         std::istringstream sss(str);
         if (sss >> i)
-        {
-            s.push(i);
-            calc++;
-            if (calc > 2)
-                std::cout << "Error" << std::endl;
-        }
-        else if (s.size() >= 2)
-        {
-            sss.clear();
-            if (sss >> c)
-                std::cout << "this is c ==>'" << c << "'"<< std::endl;
-            std::cout << "hhhh this is c ==>'" << c << "'"<< std::endl;
-            Op(c, s, calc);
-        }
-        else
-            std::cout << "Error" << std::endl;
-        str.clear();
+            {
+                s.push(i);
+                calc++;
+                if (calc > 2)
+                    exiterr();
+            }
+            else if (s.size() >= 2)
+            {
+                sss.clear();
+                c = str.front();
+                Op(c, s, calc);
+            }
+            else
+                exiterr();
+            str.clear();
     }
     if ((std::ios_base::badbit && !std::ios_base::eofbit) || s.size() > 1)
-        std::cout << "Error3" << std::endl;
+        exiterr();
+    std::cout << s.top() << std::endl;
 }
