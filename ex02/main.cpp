@@ -64,55 +64,37 @@ void    merge_sort(std::deque<unsigned int> &deq, size_t b, size_t m, size_t e)
     }
 }
 
-void    merge(std::deque<unsigned int> &deq, size_t b, size_t e)
+void    insert(std::deque<unsigned int> &deq, size_t b, size_t e)
 {
-    if (e - b + 1 > 30)
+    size_t i = b + 1;
+    size_t j;
+    unsigned int temp;
+    while (i <= e)
     {
+        j = i;
+        while (j > b && deq[j] < deq[j - 1])
+        {
+                temp = deq[j];
+                deq[j] = deq[j - 1];
+                deq[j - 1] = temp;
+                j--;
+        }
+        i++;
+    }
+}
+
+void    merge_insert(std::deque<unsigned int> &deq, size_t b, size_t e)
+{
+    if (e - b + 1 > 4)
+    {
+        std::cout << "??" << std::endl;
         size_t m = ((e - b + 1) / 2) - 1;
-        merge (deq, b, m);
-        merge (deq, m + 1, e);
-        merge_sort(b, m, e);
+        merge_insert (deq, b, m);
+        merge_insert (deq, m + 1, e);
+        merge_sort(deq, b, m, e);
     }
     else
         insert(deq, b, e);
-}
-
-void    insert(std::deque<unsigned int> &deq, size_t b, size_t e)
-{
-    size_t i = b + 1;
-    size_t j;
-    unsigned int temp;
-    while (i <= e)
-    {
-        j = i;
-        while (j > b && deq[j] < deq[j - 1])
-        {
-                temp = deq[j];
-                deq[j] = deq[j - 1];
-                deq[j - 1] = temp;
-                j--;
-        }
-        i++;
-    }
-}
-
-void    insert(std::deque<unsigned int> &deq, size_t b, size_t e)
-{
-    size_t i = b + 1;
-    size_t j;
-    unsigned int temp;
-    while (i <= e)
-    {
-        j = i;
-        while (j > b && deq[j] < deq[j - 1])
-        {
-                temp = deq[j];
-                deq[j] = deq[j - 1];
-                deq[j - 1] = temp;
-                j--;
-        }
-        i++;
-    }
 }
 
 void    pcont(std::deque<unsigned int> &deq, size_t l)
@@ -140,7 +122,8 @@ int main(int ac, char *av[])
         else
             rexit();
     }
-    insert(deq, 0, ac - 2);
-    pcont(deq, ac - 1);
+    std::cout << ac - 2 << std::endl;
+    // merge_insert(deq, 0, ac - 2);
+    // pcont(deq, ac - 1);
     deq[0];
 }
