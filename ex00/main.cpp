@@ -1,24 +1,24 @@
 #include "BitcoinExchange.hpp"
 
 //check later foran empty database
-// long long   time_to_key(std::tm date)
-// {
-//     return (date.tm_mon + date.tm_mday + date.tm_year);
-// }
-float   search_db(std::vector<std::pair<std::tm, float> > &db, std::pair<std::tm, float> &p)
+long long   time_to_key(std::tm date)
 {
-    std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
-    std::vector<std::pair<std::tm, float> >::iterator btwo = b + 1;
+    return (32 * date.tm_mon + date.tm_mday + 1500 * date.tm_year);
+}
 
-    while (b != db.end())
+double   search_db(std::map<long long, double> &db, long long k, double v)
+{
+    std::map<long long, double>::iterator r = db.upper_bound(k);
+    if (r == db.begin())
     {
-        btwo = b + 1;
-        if (btwo != db.end() &&  b->first < p.first && btwo->first <= p.first)
-            b++;
-        else
-            break;
+        std::cout << "Bitcoin was the first cryptocurrency created and is now the most valuable and well-known. It was first launched \
+        in JANNUARY 2009 by a computer programmer or group of programmers under the pseudonym Satoshi Nakamoto, whose actual identity has never been verified."\
+        << std::endl;
+        std::exception e;
+        throw e;
     }
-    return (b->second * p.second);
+    r--;
+    return (r->second * v);
 }
 
 void    isValidDate(const std::tm& date)
@@ -57,15 +57,14 @@ void extract_check(std::istringstream &ss, char &c, std::string &line)
         }
 }
 
-std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h) 
+std::map<long long, double>   parse_db(std::ifstream &h) 
 {
     char    c;
-    float    j;
+    double    j;
     std::string targ = ",";
     std::string form;
     std::string line;
-    std::pair<std::tm, float> p;
-    std::vector<std::pair<std::tm , float> > k;
+    std::map<long long, double> k;
     std::tm tm  = {};
     std::exception e;
 
@@ -95,11 +94,7 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
                 }
                 form.clear();
                 if (ss >> j)
-                { 
-                    p.first = tm;
-                    p.second = j;
-                    k.push_back(p);
-                }
+                    k[time_to_key(tm)] = j;
                 else
                 {
                     if (!(ss.rdbuf()->in_avail()))
@@ -123,15 +118,14 @@ std::vector<std::pair<std::tm , float> > parse_db(std::ifstream &h)
     return k;
 }
 
-void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db) 
+void op_f(std::ifstream &h, std::map<long long, double> &db) 
 {
     char    c;
-    float    j;
+    double    j;
     std::string targ = " | ";
     std::string form;
     std::string line;
-    std::pair<std::tm, float> p;
-    std::vector<std::pair<std::tm , float> > k;
+    std::pair<std::tm, double> p;
     std::tm tm  = {};
     std::exception e;
 
@@ -192,7 +186,7 @@ void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db)
                 }
                 std::cout << tm.tm_year << "-"\
                 << tm.tm_mon + 1 << "-" << tm.tm_mday << " => " << p.second << " = ";
-                std::cout << search_db(db, p) << std::endl;
+                std::cout << search_db(db, time_to_key(tm), j) << std::endl;
             }
         }
         catch (...)
@@ -206,7 +200,7 @@ void op_f(std::ifstream &h, std::vector<std::pair<std::tm, float> > &db)
 
 int main(int ac, char **av)
 {
-    std::vector<std::pair<std::tm , float> > db;
+    std::map<long long, double> db;
     if (ac != 2)
     {
         std::cout << "Error: wrong number of arguments" << std::endl;

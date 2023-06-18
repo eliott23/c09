@@ -1,7 +1,8 @@
 #pragma once
 #include <iostream>
+#include <ios>
+#include <map>
 #include <utility>
-#include <vector>
 #include <fstream>
 #include <istream>
 #include <ctime>
@@ -15,5 +16,4 @@ bool operator<(const std::tm& lhs, const std::tm& rhs);
 bool operator>(const std::tm& lhs, const std::tm& rhs);
 bool operator<=(const std::tm& lhs, const std::tm& rhs);
 bool operator>=(const std::tm& lhs, const std::tm& rhs);
-float   search_db(std::vector<std::pair<std::tm, float> > &db, std::pair<std::tm, float> &p);
-void    res(std::vector<std::pair<std::tm , float> > &db, std::pair<std::tm , float> &k);
+double   search_db(std::map<long long, double> &db, long long k, double v);
