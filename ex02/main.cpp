@@ -1,4 +1,6 @@
 #include <iostream>
+#include <map>
+#include <unistd.h>
 #include <istream>
 #include <sstream>
 #include <string>
@@ -87,14 +89,21 @@ void    merge_insert(std::deque<unsigned int> &deq, size_t b, size_t e)
 {
     if (e - b + 1 > 4)
     {
-        std::cout << "??" << std::endl;
-        size_t m = ((e - b + 1) / 2) - 1;
+        size_t m = ((e - b + 1) / 2) - 1 + b;
+        std::cout << "totla =" <<  e - b + 1 << std::endl;
+        std::cout << "m =" <<  m << std::endl;
+        std::cout << "e =" <<  e << std::endl;
+        std::cout << "b =" <<  b << std::endl;
+        usleep(50);
         merge_insert (deq, b, m);
         merge_insert (deq, m + 1, e);
         merge_sort(deq, b, m, e);
     }
     else
+    {
+        std::cout << "out of the recursion" << std::endl;
         insert(deq, b, e);
+    }
 }
 
 void    pcont(std::deque<unsigned int> &deq, size_t l)
@@ -123,7 +132,10 @@ int main(int ac, char *av[])
             rexit();
     }
     std::cout << ac - 2 << std::endl;
-    // merge_insert(deq, 0, ac - 2);
-    // pcont(deq, ac - 1);
+    merge_insert(deq, 0, ac - 2);
+    pcont(deq, ac - 1);
     deq[0];
+    // std::list<int> k;
+    // k[0];
+    std::map<float, float> h;
 }

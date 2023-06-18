@@ -1,6 +1,10 @@
 #include "BitcoinExchange.hpp"
 
 //check later foran empty database
+// long long   time_to_key(std::tm date)
+// {
+//     return (date.tm_mon + date.tm_mday + date.tm_year);
+// }
 float   search_db(std::vector<std::pair<std::tm, float> > &db, std::pair<std::tm, float> &p)
 {
     std::vector<std::pair<std::tm, float> >::iterator b = db.begin();
