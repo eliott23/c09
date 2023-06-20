@@ -9,7 +9,7 @@ void    exiterr()
 int main(int ac, char *av[])
 {
     std::pair<int, char> p;
-    std::stack<unsigned int> s;
+    std::stack<int> s;
     if (ac != 2)
     {
         std::cout << "Error" << std::endl;
@@ -23,7 +23,7 @@ int main(int ac, char *av[])
     std::string str;
     std::string oper = "+*-/";
     int calc;
-    unsigned int i;
+    int i;
     char c;
     while (getline(k, str, ' '))
     {
@@ -33,7 +33,7 @@ int main(int ac, char *av[])
         std::istringstream sss(str);
         if (sss >> std::noskipws >> i)
         {
-            if (i >= 100)
+            if (i >= 100 || i < 0)
                 exiterr();
             else if (i >= 10)
             {

@@ -6,5 +6,5 @@
 #include <sstream>
 #include <string>
 
-void Op(char op, std::stack<unsigned int> &stk, int &calc);
+void Op(char op, std::stack<int> &stk, int &calc);
 void    exiterr();
