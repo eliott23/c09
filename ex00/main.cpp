@@ -162,6 +162,7 @@ void op_f(std::ifstream &h, std::map<long long, double> &db)
                 {
                     if (j > 1000 || j < 0)
                     {
+                        std::cout << "-=-=-=" << j << std::endl;
                         if (j > 1000)
                             std::cout << "Error bitcoin value too large" << std::endl;
                         else

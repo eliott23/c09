@@ -27,7 +27,7 @@ int main(int ac, char *av[])
     char c;
     while (getline(k, str, ' '))
     {
-        if(!str.size() \
+        if(!str.size() || (oper.find(str.front()) != std::string::npos && str.size() != 1)\
         || ((oper.find(str.front())) == std::string::npos && !std::isdigit(str.front())))
             exiterr();
         std::istringstream sss(str);
