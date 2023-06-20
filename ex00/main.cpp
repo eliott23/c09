@@ -122,6 +122,7 @@ void op_f(std::ifstream &h, std::map<long long, double> &db)
 {
     char    c;
     double    j;
+    double r;
     std::string targ = " | ";
     std::string form;
     std::string line;
@@ -185,9 +186,10 @@ void op_f(std::ifstream &h, std::map<long long, double> &db)
                     std::cout << "Error unvalid format ==>" << line  << std::endl;
                     throw e;
                 }
+                r = search_db(db, time_to_key(tm), j);
                 std::cout << tm.tm_year << "-"\
                 << tm.tm_mon + 1 << "-" << tm.tm_mday << " => " << p.second << " = ";
-                std::cout << search_db(db, time_to_key(tm), j) << std::endl;
+                std::cout << r << std::endl;
             }
         }
         catch (...)
@@ -222,5 +224,8 @@ int main(int ac, char **av)
     std::string line;
     getline(h, line);
     db = parse_db(h);
+    getline(f, line);
+    if (line != "date | value")
+        std::cout << "Error: ==> " << line << std::endl;
     op_f(f, db);
 }
