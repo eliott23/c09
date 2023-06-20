@@ -100,11 +100,16 @@ void    merge_insert(std::vector<unsigned int> &deq, size_t b, size_t e)
         insert(deq, b, e);
 }
 
-void    pcont(std::vector<unsigned int> &deq, size_t l)
+void    pcont(std::vector<unsigned int> &deq, size_t l, int f)
 {
     size_t i = 0;
+    if (f)
+        std::cout << "After :" << std::endl;
+    else
+        std::cout << "Before :" << std::endl;
     for (; i < l; i++)
-        std::cout << deq[i] << std::endl;
+        std::cout << " " << deq[i];
+    std::cout << std::endl;
 }
 
 void    merge_sort(std::deque<unsigned int> &deq, size_t b, size_t m, size_t e)
@@ -191,26 +196,28 @@ void    merge_insert(std::deque<unsigned int> &deq, size_t b, size_t e)
         insert(deq, b, e);
 }
 
-void    pcont(std::deque<unsigned int> &deq, size_t l)
+void    pcont(std::deque<unsigned int> &deq, size_t l, int f)
 {
     size_t i = 0;
+    if (f)
+        std::cout << "After :" << std::endl;
+    else
+        std::cout << "Before :" << std::endl;
     for (; i < l; i++)
-        std::cout << deq[i] << std::endl;
+        std::cout << " " << deq[i];
+    std::cout << std::endl;
 }
 
-double	get_timestamp(struct timeval start)
+long long	get_timestamp(struct timeval start)
 {
 	struct timeval	end;
 
-	// gettimeofday(&t, NULL);
-	// v = ((t.tv_sec * 1000000) \
-	// 		+ t.tv_usec - (start.tv_sec * 1000000) - start.tv_usec);
-        gettimeofday(&end, NULL);
+    gettimeofday(&end, NULL);
 
-    double seconds = end.tv_sec - start.tv_sec;
-    double microseconds = end.tv_usec - start.tv_usec;
-    double elapsed = seconds * 1000000 + microseconds;
-	return (elapsed / 1000);
+    long long seconds = end.tv_sec - start.tv_sec;
+    long long microseconds = end.tv_usec - start.tv_usec;
+    long long elapsed = seconds * 1000000 + microseconds;
+	return (elapsed);
 }
 
 int main(int ac, char *av[])
@@ -219,10 +226,10 @@ int main(int ac, char *av[])
         rexit();
     struct timeval  s;
 	gettimeofday(&s, NULL);
-    std::cout << "after one line " << get_timestamp(s) << std::endl;
 
     std::deque<unsigned int> deq;
     std::vector<unsigned int> v;
+    long long f_d,f_v,s_v,s_d;
     unsigned int temp;
     int i = 0;
     while (av[++i])
@@ -233,7 +240,8 @@ int main(int ac, char *av[])
         else
             rexit();
     }
-    std::cout << "after filling deq : " << get_timestamp(s) << std::endl;
+    f_d = get_timestamp(s);
+    pcont(deq, ac - 1, 0);
 	gettimeofday(&s, NULL);
     i = 0;
     while (av[++i])
@@ -244,13 +252,16 @@ int main(int ac, char *av[])
         else
             rexit();
     };
-    std::cout << "after filling vec : " << get_timestamp(s) << std::endl;
+    f_v = get_timestamp(s);
 	gettimeofday(&s, NULL);
     merge_insert(v, 0, ac - 2);
-    std::cout << "time to process a range of " << ac - 1 << " elements " << get_timestamp(s) << std::endl;
+    s_v = get_timestamp(s);
 	gettimeofday(&s, NULL);
     merge_insert(deq, 0, ac - 2);
-    std::cout << "time to process a range of " << ac - 1 << " elements " << get_timestamp(s) << std::endl;
-    pcont(v, ac - 1);
-    pcont(deq, ac - 1);
+    s_d = get_timestamp(s);
+    pcont(v, ac - 1, 1);
+    std::cout << "after filling deq : " << f_d << " us" << std::endl;
+    std::cout << "after filling vec : " << f_v << " us" << std::endl;
+    std::cout << "time to process a range of " << ac - 1 << " std::vector elements " << s_v << " us" << std::endl;
+    std::cout << "time to process a range of " << ac - 1 << " std::deque elements " << s_d << " us" << std::endl;
 }
