@@ -1,6 +1,6 @@
 # include "RPN.hpp"
 
-void Op(char op, std::stack<int> &stk, int &calc)
+void Op(char op, std::stack<unsigned int> &stk, int &calc)
 {
     int t = stk.top();
     stk.pop();
