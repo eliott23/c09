@@ -27,11 +27,11 @@ int main(int ac, char *av[])
     char c;
     while (getline(k, str, ' '))
     {
-        if(str.size() > 1 || ((oper.find(str.front())) == std::string::npos && !std::isdigit(str.front())))
+        if(str.size() > 1 || !str.size() \
+        || ((oper.find(str.front())) == std::string::npos && !std::isdigit(str.front())))
             exiterr();
-        // std::cout << str << std::endl;
         std::istringstream sss(str);
-        if (sss >> i)
+        if (sss >> std::noskipws >> i)
         {
             s.push(i);
             calc++;
@@ -46,9 +46,9 @@ int main(int ac, char *av[])
         }
         else
             exiterr();
-        str.clear();
+        // str.clear();
     }
-    if ((std::ios_base::badbit && !std::ios_base::eofbit) || s.size() > 1)
+    if ((std::ios_base::badbit && !std::ios_base::eofbit) || s.size() > 1 || str.empty())
         exiterr();
     std::cout << s.top() << std::endl;
 }
