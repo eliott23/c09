@@ -18,6 +18,11 @@ void Op(char op, std::stack<unsigned int> &stk, int &calc)
             result = p * t;
             break;
         case '/':
+            if (!t)
+            {
+                std::cout << "Invalid operator." << std::endl;
+                exit(0);
+            }
             result = p / t;
             break;
         default:

@@ -1,4 +1,5 @@
 # include "RPN.hpp"
+
 void    exiterr()
 {
     std::cout << "Error" << std::endl;
